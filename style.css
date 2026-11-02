@@ -6,90 +6,113 @@
 }
 
 body {
-  overflow: hidden;
+  background: #101820;
+  color: white;
   font-family: Arial, sans-serif;
-  background: #87ceeb;
+  overflow: hidden;
+  user-select: none;
+}
+
+#game {
+  position: relative;
+  width: 100%;
+  height: 82vh;
+  min-height: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 canvas {
+  width: 100%;
+  height: 100%;
   display: block;
+  background: #87ceeb;
 }
 
 #hud {
   position: absolute;
   top: 15px;
   left: 15px;
-  z-index: 5;
-  color: white;
-  font-size: 18px;
+  right: 15px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
   font-weight: bold;
-  line-height: 2;
   text-shadow: 2px 2px 4px black;
+  pointer-events: none;
 }
 
-#menu, #gameOver {
+.overlay {
   position: absolute;
   inset: 0;
-  z-index: 10;
+  background: #081522d9;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  gap: 15px;
-  color: white;
+  justify-content: center;
+  gap: 18px;
   text-align: center;
-  background: #10232acc;
+  padding: 15px;
 }
 
-h1 {
-  color: #ffd700;
-  font-size: clamp(30px, 7vw, 55px);
+.overlay h1 {
+  color: #ffdf00;
+  font-size: clamp(30px, 6vw, 58px);
+  text-shadow: 3px 3px #a64b00;
+}
+
+.overlay p {
+  font-size: 18px;
+}
+
+.overlay small {
+  color: #ddd;
+  font-size: 14px;
 }
 
 button {
-  padding: 14px 28px;
   border: none;
-  border-radius: 10px;
-  background: #ff9800;
+  border-radius: 12px;
+  background: #ff8c00;
   color: white;
-  font-size: 19px;
+  padding: 14px 28px;
+  font-size: 20px;
   font-weight: bold;
   cursor: pointer;
 }
 
 button:active {
-  transform: scale(0.95);
+  transform: scale(0.94);
 }
 
 .hidden {
   display: none !important;
 }
 
-#controls {
-  position: absolute;
-  bottom: 25px;
-  left: 0;
-  right: 0;
-  z-index: 5;
+#mobileControls {
+  height: 18vh;
+  min-height: 90px;
   display: flex;
-  justify-content: space-between;
-  padding: 0 25px;
-  pointer-events: none;
+  justify-content: space-evenly;
+  align-items: center;
+  gap: 8px;
+  background: #101820;
 }
 
-#controls button {
-  width: 65px;
-  height: 65px;
+#mobileControls button {
+  width: 62px;
+  height: 62px;
   padding: 0;
   border-radius: 50%;
-  background: #222b;
-  border: 2px solid white;
-  pointer-events: auto;
+  background: #263b50;
+  border: 2px solid #ffffff;
+  font-size: 23px;
   touch-action: none;
 }
 
-@media (min-width: 800px) {
-  #controls {
-    display: none;
+@media (min-width: 900px) {
+  #mobileControls {
+    height: 18vh;
   }
 }

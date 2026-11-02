@@ -4,35 +4,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Open World City Game</title>
+  <title>Endless Runner Game</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="hud" class="hidden">
-    <div>🚗 SPEED: <span id="speed">0</span> km/h</div>
-    <div>⭐ SCORE: <span id="score">0</span></div>
+  <div id="game">
+    <canvas id="gameCanvas" width="900" height="600"></canvas>
+
+    <div id="hud" class="hidden">
+      <span>⭐ Score: <b id="score">0</b></span>
+      <span>🪙 Coins: <b id="coins">0</b></span>
+    </div>
+
+    <div id="menu" class="overlay">
+      <h1>ENDLESS RUNNER</h1>
+      <p>Run • Jump • Slide • Collect Coins</p>
+      <button id="startBtn">START GAME</button>
+      <small>← → Move | ↑ Jump | ↓ Slide</small>
+    </div>
+
+    <div id="gameOver" class="overlay hidden">
+      <h1>GAME OVER</h1>
+      <p>Score: <b id="finalScore">0</b></p>
+      <p>Coins: <b id="finalCoins">0</b></p>
+      <button id="restartBtn">PLAY AGAIN</button>
+    </div>
   </div>
 
-  <div id="menu">
-    <h1>OPEN WORLD CITY</h1>
-    <p>Explore the city and collect coins!</p>
-    <button id="startBtn">START GAME</button>
-    <p>Controls: Arrow Keys / WASD</p>
-  </div>
-
-  <div id="gameOver" class="hidden">
-    <h1>GAME OVER</h1>
-    <p>Your Score: <span id="finalScore">0</span></p>
-    <button id="restartBtn">PLAY AGAIN</button>
-  </div>
-
-  <div id="controls" class="hidden">
+  <div id="mobileControls">
     <button id="leftBtn">◀</button>
+    <button id="jumpBtn">⬆</button>
+    <button id="slideBtn">⬇</button>
     <button id="rightBtn">▶</button>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
   <script src="game.js"></script>
 </body>
 </html>
+
