@@ -1,44 +1,38 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>City Rush 3D</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Open World City</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div id="hud">
-  <div class="pill">⭐ Score: <span id="score">0</span></div>
-  <div class="pill">🪙 Coins: <span id="coins">0</span></div>
-  <div class="pill">🏆 Best: <span id="best">0</span></div>
-</div>
-
-<div id="help">
-  ← → Move | ↑ / Space Jump | ↓ Slide | Swipe on mobile
-</div>
-
-<div id="touch">
-  <div style="display:flex;gap:10px">
-    <div class="touchbtn" data-action="left">←</div>
-    <div class="touchbtn" data-action="right">→</div>
+  <div id="hud">
+    <div>🚗 SPEED: <span id="speed">0</span> km/h</div>
+    <div>⭐ SCORE: <span id="score">0</span></div>
   </div>
-  <div style="display:flex;gap:10px">
-    <div class="touchbtn" data-action="jump">↑</div>
-    <div class="touchbtn" data-action="slide">↓</div>
-  </div>
-</div>
 
-<div id="overlay">
-  <div id="panel">
-    <h1>CITY RUSH 3D</h1>
-    <p>Race past huge houses, the Taj Mahal, Red Fort and a riverside road. Collect coins and dodge traffic!</p>
-    <button id="startBtn">START RUN</button>
-    <p class="small">A mini browser game made with Three.js. Use keyboard or touch controls.</p>
+  <div id="menu">
+    <h1>OPEN WORLD CITY</h1>
+    <p>Explore the city and collect coins!</p>
+    <button id="startBtn">START GAME</button>
+    <p class="instructions">Controls: Arrow Keys / WASD</p>
   </div>
-</div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-<script src="game.js"></script>
+  <div id="gameOver" class="hidden">
+    <h1>GAME OVER</h1>
+    <p>Your Score: <span id="finalScore">0</span></p>
+    <button id="restartBtn">PLAY AGAIN</button>
+  </div>
+
+  <div id="controls">
+    <button id="leftBtn">◀</button>
+    <button id="rightBtn">▶</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="game.js"></script>
 </body>
 </html>

@@ -1,14 +1,14 @@
+
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
 }
 
 body {
-  margin: 0;
   overflow: hidden;
   font-family: Arial, sans-serif;
   background: #87ceeb;
-  color: white;
-  touch-action: none;
 }
 
 canvas {
@@ -16,109 +16,91 @@ canvas {
 }
 
 #hud {
-  position: fixed;
-  top: 12px;
-  left: 12px;
-  right: 12px;
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  z-index: 5;
-  pointer-events: none;
-}
-
-.pill {
-  background: rgba(0,0,0,.65);
-  padding: 9px 13px;
-  border-radius: 20px;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-#help {
-  position: fixed;
-  top: 58px;
-  width: 100%;
-  text-align: center;
-  color: white;
-  text-shadow: 0 2px 4px black;
-  font-size: 13px;
-  z-index: 5;
-  pointer-events: none;
-}
-
-#touch {
-  position: fixed;
-  bottom: 18px;
+  position: absolute;
+  top: 15px;
   left: 15px;
-  right: 15px;
-  display: flex;
-  justify-content: space-between;
-  z-index: 6;
-}
-
-.touchbtn {
-  width: 55px;
-  height: 55px;
-  border-radius: 50%;
-  background: rgba(0,0,0,.55);
-  border: 2px solid rgba(255,255,255,.7);
-  display: grid;
-  place-items: center;
-  font-size: 25px;
+  z-index: 5;
+  color: white;
+  font-size: 18px;
   font-weight: bold;
-  user-select: none;
+  line-height: 2;
+  text-shadow: 2px 2px 4px black;
 }
 
-#overlay {
-  position: fixed;
+#menu, #gameOver {
+  position: absolute;
   inset: 0;
-  background: rgba(0,0,0,.65);
+  z-index: 10;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  z-index: 10;
-  padding: 20px;
-}
-
-#panel {
-  max-width: 420px;
-  width: 100%;
-  background: #172033;
-  border: 2px solid #ffd34e;
-  border-radius: 20px;
-  padding: 25px;
+  color: white;
   text-align: center;
-  box-shadow: 0 10px 40px rgba(0,0,0,.5);
+  background: linear-gradient(#0009, #000c);
 }
 
-#panel h1 {
-  color: #ffd34e;
-  font-size: 32px;
-  margin-top: 0;
+#menu h1, #gameOver h1 {
+  font-size: clamp(30px, 7vw, 55px);
+  margin-bottom: 15px;
+  color: #ffd700;
 }
 
-#panel p {
-  line-height: 1.5;
-}
-
-#panel button {
-  background: #ffb52e;
-  border: 0;
-  border-radius: 30px;
-  padding: 13px 30px;
+#menu p, #gameOver p {
+  margin: 10px;
   font-size: 17px;
+}
+
+button {
+  border: none;
+  border-radius: 10px;
+  padding: 14px 28px;
+  background: #ff9800;
+  color: white;
+  font-size: 18px;
   font-weight: bold;
   cursor: pointer;
 }
 
-#panel .small {
-  font-size: 12px;
-  opacity: .75;
+button:active {
+  transform: scale(0.95);
+}
+
+.instructions {
+  font-size: 14px !important;
+  color: #ddd;
+}
+
+.hidden {
+  display: none !important;
+}
+
+#controls {
+  position: absolute;
+  bottom: 25px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 25px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+#controls button {
+  width: 65px;
+  height: 65px;
+  padding: 0;
+  border-radius: 50%;
+  background: #222b;
+  border: 2px solid white;
+  font-size: 25px;
+  pointer-events: auto;
+  touch-action: none;
 }
 
 @media (min-width: 800px) {
-  #touch {
-    opacity: .55;
+  #controls {
+    display: none;
   }
 }
