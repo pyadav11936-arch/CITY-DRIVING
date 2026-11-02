@@ -1,4 +1,4 @@
-
+console.log("GAME JS LOADED");
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
 scene.fog = new THREE.Fog(0x87ceeb, 100, 300);
@@ -224,6 +224,7 @@ holdButton("leftBtn", "arrowleft");
 holdButton("rightBtn", "arrowright");
 
 // START / RESTART
+console.log("START BUTTON FOUND:", document.getElementById("startBtn"));
 function startGame() {
   score = 0;
   gameSpeed = 22;
