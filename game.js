@@ -1,125 +1,122 @@
-console.log("GAME JS LOADED");
+
+// CHECK THREE.JS
+if (typeof THREE === "undefined") {
+  alert("3D library load nahi hui. Internet check karo aur page refresh karo.");
+  throw new Error("THREE is not loaded");
+}
+
+// SCENE
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x87ceeb);
-scene.fog = new THREE.Fog(0x87ceeb, 100, 300);
+scene.fog = new THREE.Fog(0x87ceeb, 80, 260);
 
 const camera = new THREE.PerspectiveCamera(
   65, window.innerWidth / window.innerHeight, 0.1, 500
 );
-
 camera.position.set(0, 8, 15);
-camera.lookAt(0, 0, -15);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.shadowMap.enabled = true;
 document.body.appendChild(renderer.domElement);
 
 // LIGHTS
-scene.add(new THREE.HemisphereLight(0xffffff, 0x667755, 2));
+scene.add(new THREE.HemisphereLight(0xffffff, 0x557744, 2));
 
-const sunlight = new THREE.DirectionalLight(0xffffff, 2);
-sunlight.position.set(-30, 60, 30);
-sunlight.castShadow = true;
-scene.add(sunlight);
+const sun = new THREE.DirectionalLight(0xffffff, 2);
+sun.position.set(-20, 40, 20);
+scene.add(sun);
+
+// MATERIAL HELPER
+function material(color) {
+  return new THREE.MeshStandardMaterial({ color });
+}
+
+// BOX HELPER
+function box(parent, w, h, d, color, x, y, z) {
+  const obj = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, d),
+    material(color)
+  );
+  obj.position.set(x, y, z);
+  parent.add(obj);
+  return obj;
+}
 
 // GROUND
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(300, 600),
-  new THREE.MeshStandardMaterial({ color: 0x398b3b })
+  material(0x388b3b)
 );
 ground.rotation.x = -Math.PI / 2;
 ground.position.z = -180;
-ground.receiveShadow = true;
 scene.add(ground);
 
 // ROAD
 const road = new THREE.Mesh(
   new THREE.PlaneGeometry(18, 600),
-  new THREE.MeshStandardMaterial({ color: 0x333333 })
+  material(0x333333)
 );
 road.rotation.x = -Math.PI / 2;
-road.position.set(0, 0.02, -180);
+road.position.set(0, 0.03, -180);
 scene.add(road);
 
-// ROAD SIDES
-function makeBox(w, h, d, color, x, y, z, parent = scene) {
-  const mesh = new THREE.Mesh(
-    new THREE.BoxGeometry(w, h, d),
-    new THREE.MeshStandardMaterial({ color })
-  );
-  mesh.position.set(x, y, z);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
-  parent.add(mesh);
-  return mesh;
-}
-
-makeBox(1, 0.2, 600, 0xcccccc, -9.5, 0.1, -180);
-makeBox(1, 0.2, 600, 0xcccccc, 9.5, 0.1, -180);
-
-// WORLD OBJECTS
+// MOVING WORLD
 const world = new THREE.Group();
 scene.add(world);
 
-const movingObjects = [];
+const scenery = [];
 const traffic = [];
 const coins = [];
 
-// ROAD LINES
+// ROAD MARKINGS
 for (let z = -400; z < 20; z += 12) {
-  const line = makeBox(0.25, 0.04, 5, 0xffffff, 0, 0.06, z, world);
-  movingObjects.push(line);
+  const line = box(world, 0.2, 0.05, 5, 0xffffff, 0, 0.07, z);
+  scenery.push(line);
 }
 
 // BUILDINGS
 function createBuilding(x, z) {
-  const height = 10 + Math.random() * 28;
-  const width = 7 + Math.random() * 7;
-  const colors = [0xe0b68c, 0x9bb6c9, 0xd9d1b9, 0xaaaaaa];
+  const group = new THREE.Group();
+  const height = 12 + Math.random() * 22;
+  const colors = [0xd9b38c, 0xaabbcc, 0xc9c9b9, 0xaaaaaa];
 
-  const building = new THREE.Group();
+  const color = colors[Math.floor(Math.random() * colors.length)];
 
-  const body = makeBox(
-    width, height, 10,
-    colors[Math.floor(Math.random() * colors.length)],
-    0, height / 2, 0, building
-  );
+  box(group, 9, height, 10, color, 0, height / 2, 0);
 
-  // Windows
-  for (let y = 2; y < height - 1; y += 3) {
-    for (let wx = -width / 2 + 1.5; wx < width / 2; wx += 2.5) {
-      makeBox(1, 1.4, 0.12, 0x83d7ef, wx, y, 5.06, building);
+  for (let y = 3; y < height - 1; y += 4) {
+    for (let wx = -3; wx <= 3; wx += 3) {
+      box(group, 1.2, 1.5, 0.12, 0x83d7ef, wx, y, 5.06);
     }
   }
 
-  building.position.set(x, 0, z);
-  world.add(building);
-  movingObjects.push(building);
+  group.position.set(x, 0, z);
+  world.add(group);
+  scenery.push(group);
 }
 
 for (let z = -380; z < 10; z += 28) {
-  createBuilding(-17 - Math.random() * 8, z);
-  createBuilding(17 + Math.random() * 8, z - 12);
+  createBuilding(-17, z);
+  createBuilding(17, z - 12);
 }
 
 // TREES
 function createTree(x, z) {
   const tree = new THREE.Group();
 
-  makeBox(0.8, 4, 0.8, 0x754321, 0, 2, 0, tree);
+  box(tree, 0.8, 4, 0.8, 0x754321, 0, 2, 0);
 
   const leaves = new THREE.Mesh(
-    new THREE.SphereGeometry(2.5, 12, 10),
-    new THREE.MeshStandardMaterial({ color: 0x16852b })
+    new THREE.SphereGeometry(2.4, 12, 10),
+    material(0x16852b)
   );
   leaves.position.y = 5;
   tree.add(leaves);
 
   tree.position.set(x, 0, z);
   world.add(tree);
-  movingObjects.push(tree);
+  scenery.push(tree);
 }
 
 for (let z = -350; z < 10; z += 35) {
@@ -129,17 +126,15 @@ for (let z = -350; z < 10; z += 35) {
 
 // PLAYER CAR
 const car = new THREE.Group();
-scene.add(car);
 
-makeBox(2.5, 0.8, 4.5, 0xe51b23, 0, 0.9, 0, car);
-makeBox(1.8, 0.9, 2, 0x222f46, 0, 1.65, -0.3, car);
+box(car, 2.5, 0.8, 4.5, 0xe51b23, 0, 0.9, 0);
+box(car, 1.8, 0.9, 2, 0x222f46, 0, 1.65, -0.3);
 
-// Wheels
 for (const x of [-1.25, 1.25]) {
   for (const z of [-1.4, 1.4]) {
     const wheel = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.48, 0.48, 0.3, 16),
-      new THREE.MeshStandardMaterial({ color: 0x111111 })
+      new THREE.CylinderGeometry(0.45, 0.45, 0.3, 16),
+      material(0x111111)
     );
     wheel.rotation.z = Math.PI / 2;
     wheel.position.set(x, 0.5, z);
@@ -148,54 +143,52 @@ for (const x of [-1.25, 1.25]) {
 }
 
 car.position.set(0, 0, 5);
+scene.add(car);
 
-// TRAFFIC CARS
-function createTrafficCar(z) {
+// TRAFFIC
+function createTraffic(z, index) {
   const vehicle = new THREE.Group();
-
   const colors = [0x2196f3, 0xffcc00, 0xffffff, 0x222222];
-  const color = colors[Math.floor(Math.random() * colors.length)];
 
-  makeBox(2.2, 0.8, 4, color, 0, 0.8, 0, vehicle);
-  makeBox(1.6, 0.8, 1.8, 0x333b4a, 0, 1.5, -0.2, vehicle);
+  const color = colors[index % colors.length];
 
-  const lane = [-5, 0, 5][Math.floor(Math.random() * 3)];
-  vehicle.position.set(lane, 0, z);
+  box(vehicle, 2.2, 0.8, 4, color, 0, 0.8, 0);
+  box(vehicle, 1.6, 0.8, 1.8, 0x333b4a, 0, 1.5, -0.2);
 
+  vehicle.position.set([-5, 0, 5][index % 3], 0, z);
   world.add(vehicle);
   traffic.push(vehicle);
 }
 
-for (let i = 0; i < 7; i++) {
-  createTrafficCar(-40 - i * 45);
+for (let i = 0; i < 6; i++) {
+  createTraffic(-50 - i * 55, i);
 }
 
 // COINS
-function createCoin(z) {
+function createCoin(z, index) {
   const coin = new THREE.Mesh(
     new THREE.TorusGeometry(0.8, 0.2, 10, 20),
     new THREE.MeshStandardMaterial({
       color: 0xffd700,
-      metalness: 0.7,
-      roughness: 0.2
+      metalness: 0.6,
+      roughness: 0.25
     })
   );
 
-  coin.position.set([-5, 0, 5][Math.floor(Math.random() * 3)], 1.5, z);
+  coin.position.set([-5, 0, 5][index % 3], 1.5, z);
   world.add(coin);
   coins.push(coin);
 }
 
 for (let i = 0; i < 6; i++) {
-  createCoin(-70 - i * 65);
+  createCoin(-80 - i * 65, i);
 }
 
-// GAME STATE
+// GAME VARIABLES
 let running = false;
-let gameSpeed = 22;
 let score = 0;
+let speed = 22;
 let playerX = 0;
-
 const keys = {};
 
 window.addEventListener("keydown", (e) => {
@@ -208,98 +201,113 @@ window.addEventListener("keyup", (e) => {
 
 // MOBILE BUTTONS
 function holdButton(id, key) {
-  const btn = document.getElementById(id);
+  const button = document.getElementById(id);
 
-  btn.addEventListener("pointerdown", (e) => {
+  button.addEventListener("pointerdown", (e) => {
     e.preventDefault();
     keys[key] = true;
   });
 
-  btn.addEventListener("pointerup", () => keys[key] = false);
-  btn.addEventListener("pointerleave", () => keys[key] = false);
-  btn.addEventListener("pointercancel", () => keys[key] = false);
+  ["pointerup", "pointerleave", "pointercancel"].forEach(event => {
+    button.addEventListener(event, () => keys[key] = false);
+  });
 }
 
 holdButton("leftBtn", "arrowleft");
 holdButton("rightBtn", "arrowright");
 
-// START / RESTART
-console.log("START BUTTON FOUND:", document.getElementById("startBtn"));
-function startGame() {
+// RESET
+function resetGame() {
   score = 0;
-  gameSpeed = 22;
+  speed = 22;
   playerX = 0;
   car.position.x = 0;
 
   traffic.forEach((vehicle, i) => {
-    vehicle.position.z = -40 - i * 45;
+    vehicle.position.z = -50 - i * 55;
+    vehicle.position.x = [-5, 0, 5][i % 3];
   });
 
   coins.forEach((coin, i) => {
-    coin.position.z = -70 - i * 65;
+    coin.position.z = -80 - i * 65;
+    coin.position.x = [-5, 0, 5][i % 3];
     coin.visible = true;
   });
 
-  document.getElementById("score").textContent = score;
+  document.getElementById("score").textContent = "0";
+  document.getElementById("speed").textContent = "0";
+}
+
+// START GAME
+function startGame() {
+  resetGame();
+
   document.getElementById("menu").classList.add("hidden");
   document.getElementById("gameOver").classList.add("hidden");
+  document.getElementById("hud").classList.remove("hidden");
+  document.getElementById("controls").classList.remove("hidden");
 
   running = true;
 }
 
+// GAME OVER
 function endGame() {
+  if (!running) return;
+
   running = false;
+
   document.getElementById("finalScore").textContent = score;
   document.getElementById("gameOver").classList.remove("hidden");
 }
 
+// BUTTON EVENTS
 document.getElementById("startBtn").addEventListener("click", startGame);
 document.getElementById("restartBtn").addEventListener("click", startGame);
 
-// ANIMATION
-let lastTime = 0;
+// GAME LOOP
+let previousTime = 0;
 
 function animate(time) {
   requestAnimationFrame(animate);
 
-  const dt = Math.min((time - lastTime) / 1000 || 0, 0.05);
-  lastTime = time;
+  const dt = Math.min((time - previousTime) / 1000 || 0, 0.05);
+  previousTime = time;
 
   if (running) {
-    // Steering
+    // CAR MOVEMENT
     if (keys["arrowleft"] || keys["a"]) playerX -= 12 * dt;
     if (keys["arrowright"] || keys["d"]) playerX += 12 * dt;
 
     playerX = THREE.MathUtils.clamp(playerX, -6.5, 6.5);
     car.position.x = THREE.MathUtils.lerp(car.position.x, playerX, 0.2);
 
-    // Move road markings and city
-    movingObjects.forEach((obj) => {
-      obj.position.z += gameSpeed * dt;
+    // CITY AND ROAD MOVEMENT
+    scenery.forEach((obj) => {
+      obj.position.z += speed * dt;
 
       if (obj.position.z > 20) {
         obj.position.z -= 420;
       }
     });
 
-    // Traffic movement and collision
+    // TRAFFIC MOVEMENT
     traffic.forEach((vehicle) => {
-      vehicle.position.z += gameSpeed * dt * 0.8;
+      vehicle.position.z += speed * dt * 0.8;
 
       if (vehicle.position.z > 18) {
-        vehicle.position.z = -250 - Math.random() * 100;
+        vehicle.position.z = -280 - Math.random() * 80;
         vehicle.position.x = [-5, 0, 5][Math.floor(Math.random() * 3)];
       }
 
-      const closeZ = Math.abs(vehicle.position.z - car.position.z) < 3.2;
-      const closeX = Math.abs(vehicle.position.x - car.position.x) < 2.1;
+      const hitZ = Math.abs(vehicle.position.z - car.position.z) < 3.2;
+      const hitX = Math.abs(vehicle.position.x - car.position.x) < 2.1;
 
-      if (closeZ && closeX) endGame();
+      if (hitZ && hitX) endGame();
     });
 
-    // Collect coins
+    // COIN COLLECTION
     coins.forEach((coin) => {
-      coin.position.z += gameSpeed * dt;
+      coin.position.z += speed * dt;
       coin.rotation.y += 3 * dt;
 
       if (
@@ -318,15 +326,15 @@ function animate(time) {
       }
     });
 
-    gameSpeed = Math.min(gameSpeed + dt * 0.25, 45);
+    speed = Math.min(speed + dt * 0.25, 45);
 
     document.getElementById("score").textContent = score;
-    document.getElementById("speed").textContent =
-      Math.round(gameSpeed * 3.6);
+    document.getElementById("speed").textContent = Math.round(speed * 3.6);
 
     camera.position.x = THREE.MathUtils.lerp(
       camera.position.x, car.position.x * 0.35, 0.05
     );
+
     camera.lookAt(car.position.x * 0.2, 0, -15);
   }
 
@@ -335,7 +343,7 @@ function animate(time) {
 
 requestAnimationFrame(animate);
 
-// RESIZE
+// WINDOW RESIZE
 window.addEventListener("resize", () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();

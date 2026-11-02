@@ -33,42 +33,32 @@ canvas {
   z-index: 10;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  gap: 15px;
   color: white;
   text-align: center;
-  background: linear-gradient(#0009, #000c);
+  background: #10232acc;
 }
 
-#menu h1, #gameOver h1 {
-  font-size: clamp(30px, 7vw, 55px);
-  margin-bottom: 15px;
+h1 {
   color: #ffd700;
-}
-
-#menu p, #gameOver p {
-  margin: 10px;
-  font-size: 17px;
+  font-size: clamp(30px, 7vw, 55px);
 }
 
 button {
+  padding: 14px 28px;
   border: none;
   border-radius: 10px;
-  padding: 14px 28px;
   background: #ff9800;
   color: white;
-  font-size: 18px;
+  font-size: 19px;
   font-weight: bold;
   cursor: pointer;
 }
 
 button:active {
   transform: scale(0.95);
-}
-
-.instructions {
-  font-size: 14px !important;
-  color: #ddd;
 }
 
 .hidden {
@@ -80,10 +70,10 @@ button:active {
   bottom: 25px;
   left: 0;
   right: 0;
+  z-index: 5;
   display: flex;
   justify-content: space-between;
   padding: 0 25px;
-  z-index: 5;
   pointer-events: none;
 }
 
@@ -94,7 +84,6 @@ button:active {
   border-radius: 50%;
   background: #222b;
   border: 2px solid white;
-  font-size: 25px;
   pointer-events: auto;
   touch-action: none;
 }
